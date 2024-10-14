@@ -16,7 +16,7 @@ I am developing LaneWise to help drivers select the best lane based on real-time
 ## Data Collection
 
 - **Source:** 
-  - Live webcam data from Mass511 or user-uploaded traffic footage.
+  - webcam data (images) from Public APIs or user-uploaded traffic footage.
 - **Format:** 
   - Images or video footage showing highway lanes.
 - **Collection Method:** 
