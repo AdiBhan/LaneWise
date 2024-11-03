@@ -22,8 +22,7 @@ LaneWise is a real-time traffic lane decision system that helps drivers optimize
   - Lane change events and trajectories
   - Time-stamped vehicle movements
   - Inter-vehicle spacing measurements
-- High-resolution temporal data (0.1 second intervals)
-- Professional-grade data quality from US DOT
+- Highly precise time-based dataset (0.1 second intervals)
 
 ### Data Processing Strategy
 The system processes raw trajectory data through several stages:
