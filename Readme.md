@@ -25,9 +25,9 @@ LaneWise is a real-time traffic lane decision system that helps drivers optimize
 - Highly precise time-based dataset (0.1 second intervals)
 
 ### Data Processing Strategy
-The system processes raw trajectory data through several stages:
+The system processes traffic data through several stages:
 
-1. **Temporal Aggregation**:
+1. **Time-Based Aggregations**:
    - Groups data into 5-minute windows
    - Reduces 0.1-second readings to manageable summaries
    - Smooths out momentary traffic fluctuations
@@ -61,7 +61,6 @@ The system processes raw trajectory data through several stages:
 4. **Data Standardization**:
    - Feature scaling for consistent model input
    - Outlier detection and handling
-   - Missing value imputation where necessary
 
 ## Machine Learning Implementation
 
