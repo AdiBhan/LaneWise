@@ -9,64 +9,54 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-
-    # Override CI environment variable for the entire job
+    
     env:
       CI: false
-
+      PYTHONPATH: ${{ github.workspace }}
+    
     steps:
     - name: Checkout Code
       uses: actions/checkout@v3
-
-    # Set up Python
+    
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.9'
-
-    # Set up Node.js
+    
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '16'
-
-    # Install backend dependencies
+        node-version: '18'
+    
+    - name: Create Directories
+      run: |
+        mkdir -p server/models server/data server/photos
+    
     - name: Install Python Dependencies
       run: |
         cd server
         pip install --upgrade pip
         pip install -r requirements.txt
-
-    # Install frontend dependencies
+    
     - name: Install Node.js Dependencies
       run: |
         cd client
-        npm install
-
-    # Build Frontend
+        npm clean-install
+    
     - name: Build Frontend
       run: |
         cd client
         npm run build
-
-    # Start the FastAPI server
-    - name: Start Backend 
+    
+    - name: Start Backend Server
       run: |
         cd server
-        nohup uvicorn app:app --host 0.0.0.0 --port 8000 &
-
-    # Test the /evaluate endpoint using curl
+        python -m uvicorn api:app --host 0.0.0.0 --port 8000 &
+    
     - name: Test /evaluate Endpoint
       run: |
-        sleep 10  # Wait for the server to start
+        sleep 30
         curl -s -X POST http://127.0.0.1:8000/evaluate \
           -H "Content-Type: application/json" \
-          -d '[
-                {
-                  "lane_id": 1,
-                  "vehicle_count": 20,
-                  "avg_speed": 60.5,
-                  "avg_space": 100.0,
-                  "avg_time": 2.5
-                }
-              ]' | grep -q '"lane_id": 1' || exit 1
+          -d '[{"lane_id":1,"vehicle_count":20,"avg_speed":60.5,"avg_space":100.0,"avg_time":2.5}]' \
+          | grep -q '"lane_id": 1' || exit 1

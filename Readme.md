@@ -15,29 +15,36 @@
 
 <h2>Build and Run Instructions</h2>
 
+<h3>Dataset Setup (Required)</h3>
+<ol>
+  <li>Download the NGSIM Vehicle Trajectories dataset from <a href="https://data.transportation.gov/Automobiles/Next-Generation-Simulation-NGSIM-Vehicle-Trajector/8ect-6jqj/data_preview">data.transportation.gov</a></li>
+  <li>Save the downloaded CSV file as <code>Next_Generation_Simulation__NGSIM__Vehicle_Trajectories_and_Supporting_Data.csv</code> in the <code>server/data/</code> directory</li>
+</ol>
+
 <h3>Dependencies & Setup</h3>
 <p>Before running LaneWise, ensure you have:</p>
 <ul>
   <li>Python 3.9+ installed</li>
-  <li>Node.js and npm installed for the frontend</li>
+  <li>Node.js and npm installed</li>
   <li>GNU Make installed</li>
 </ul>
 
-<h3>Makefile and Automated Setup</h3>
-<p>A <code>Makefile</code> is provided for streamlined installation and execution:</p>
-<div class="code-block">`
-- make install     # Installs Python and Node.js dependencies  
-- make build       # Builds the frontend and backend artifacts  
-- make run         # Starts the backend server and frontend development server  `
-
+<h3>Automated Setup (Make)</h3>
+<div class="code-block">
+<pre>
+make install     # Installs Python and Node.js dependencies
+make build      # Builds the frontend and backend artifacts
+make run        # Starts the backend server and frontend development server
+</pre>
 </div>
 
-<h3>Manual Steps (If Needed)</h3>
+<h3>Manual Setup</h3>
 <ol>
   <li><strong>Backend:</strong>
     <pre class="code-block">
 cd server
 pip install -r requirements.txt
+# Ensure dataset is in server/data/ directory
 python lane_wise_system.py   # Train model & save artifacts
 uvicorn api:app --reload     # Start FastAPI backend at localhost:8000
     </pre>
@@ -51,20 +58,10 @@ npm start   # Launches React frontend on localhost:3000
   </li>
 </ol>
 
-<h2>Testing and GitHub Workflow</h2>
-<p>We include a test suite and a GitHub Actions workflow (<code>.github/workflows/test.yml</code>) to ensure continuous integration and basic regression checks. Tests validate data loading, preprocessing steps, and endpoint responses.</p>
-
-<h3>Running Tests Locally</h3>
-<div class="code-block">
-make test
-</div>
-
-<p>This command runs unit tests under the <code>tests/</code> directory.</p>
-
 <h2>Data Processing and Modeling</h2>
 
 <h3>Dataset</h3>
-<p>We utilize the NGSIM Vehicle Trajectories dataset from I-80. This dataset includes millions of time-stamped records at 0.1-second intervals, capturing a wide range of traffic conditions. Key features:</p>
+<p>I utilize the NGSIM Vehicle Trajectories dataset from I-80. This dataset includes millions of time-stamped records at 0.1-second intervals, capturing a wide range of traffic conditions. Key features:</p>
 <ul>
   <li>Vehicle speeds (v_Vel)</li>
   <li>Positions and spacing (Space_Headway)</li>
@@ -79,9 +76,9 @@ make test
   </li>
 
   <li><strong>Feature Engineering:</strong>  
-    Beyond the raw measures, we derive new features:
+    Beyond the raw measures, I derive new features:
     <ul>
-      <li><strong>Density:</strong> Vehicles per segment length (e.g., per 0.5 miles), indicating how “crowded” a lane is.</li>
+      <li><strong>Density:</strong> Vehicles per segment length (e.g., per 0.5 miles), indicating how "crowded" a lane is.</li>
       <li><strong>Flow:</strong> Vehicles per hour, computed by scaling the 5-minute vehicle count by 12.</li>
     </ul>
     Density and flow provide richer context for understanding traffic states. High density and low speed often indicate heavy congestion. High flow with moderate speed might suggest efficient traffic handling.
@@ -93,7 +90,7 @@ make test
 </ol>
 
 <h3>Clustering Model - K-Means++</h3>
-<p>We employ the K-means++ initialization to ensure better centroid placement. Initially, we chose <code>n_clusters=3</code> for simplicity, representing <em>low</em>, <em>medium</em>, and <em>high</em> congestion states. We use features:</p>
+<p>I employ the K-means++ initialization to ensure better centroid placement. Initially, I chose <code>n_clusters=3</code> for simplicity, representing <em>low</em>, <em>medium</em>, and <em>high</em> congestion states. I use features:</p>
 <ul>
   <li>vehicle_count</li>
   <li>avg_speed</li>
@@ -103,10 +100,10 @@ make test
   <li>flow</li>
 </ul>
 
-<p>The model naturally groups lanes based on how these metrics co-vary. After fitting the model and scaling data, we assign congestion levels based on cluster center speeds. The cluster with the highest average speed becomes <strong>low congestion</strong>, the lowest speed cluster is <strong>high congestion</strong>, and the remaining cluster is <strong>medium congestion</strong>.</p>
+<p>The model naturally groups lanes based on how these metrics co-vary. After fitting the model and scaling data, I assign congestion levels based on cluster center speeds. The cluster with the highest average speed becomes <strong>low congestion</strong>, the lowest speed cluster is <strong>high congestion</strong>, and the remaining cluster is <strong>medium congestion</strong>.</p>
 
 <h2>Visualizations of Data</h2>
-<p>We provide several static plots for insight. In the future, we plan to incorporate interactive dashboards using libraries like Plotly or Bokeh, enabling users to hover and filter data interactively.</p>
+<p>I provide several static plots for insight. In the future, I plan to incorporate interactive dashboards using libraries like Plotly or Bokeh, enabling users to hover and filter data interactively.</p>
 
 <h3>Speed Distribution by Congestion Level</h3>
 <p><img src="server/photos/average_speed_boxplot.png" alt="Average Speed Box Plot" /></p>
@@ -130,7 +127,7 @@ This visualization confirms that the clustering separates lanes into meaningful 
 
 <h3>Lane Distribution by Congestion Level</h3>
 <p><img src="server/photos/congestion_level_histogram.png" alt="Congestion Level Histogram" /></p>
-<p>The histogram shows how many lanes fall into each congestion level. This distribution can reflect typical roadway usage patterns. A balanced distribution suggests the method is capturing a range of conditions rather than forcing all lanes into a single category.</p>
+<p>The histogram shows how many lanes fall into each congestion level. This distribution reflects typical roadway usage patterns. A balanced distribution suggests the method is capturing a range of conditions rather than forcing all lanes into a single category.</p>
 
 <h3>Metric Correlations</h3>
 <p><img src="server/photos/correlation_heatmap.png" alt="Correlation Heatmap" /></p>
@@ -143,22 +140,19 @@ This visualization confirms that the clustering separates lanes into meaningful 
 This informs feature selection and helps interpret cluster assignments.</p>
 
 <h2>Results and Achieving the Goal</h2>
-<p>Our ultimate goal was to provide a data-driven method to classify and recommend lanes based on traffic patterns. With K-means++ and additional features (density, flow), we achieved:</p>
+<p>My ultimate goal was to provide a data-driven method to classify and recommend lanes based on traffic patterns. With K-means++ and additional features (density, flow), I achieved:</p>
 <ul>
   <li><strong>Improved Silhouette Score (~0.52):</strong> Indicates that clusters are better separated and more cohesive than before.</li>
   <li><strong>Meaningful Congestion Classes:</strong> Lanes classified as "low congestion" truly exhibit higher speeds and better throughput. "High congestion" lanes show the opposite, and "medium" lanes fall in between.</li>
   <li><strong>Realistic Recommendations:</strong> The recommended lane ("low") often corresponds to conditions drivers prefer—higher speeds and reasonable density—validating that the model output aligns with intuitive traffic conditions.</li>
 </ul>
 
-<p>These results show that we met our objective: using machine learning to transform raw trajectory data into actionable lane recommendations. The improvements in cluster quality, combined with meaningful labeling, demonstrate success.</p>
+<p>These results show that I met my objective: using machine learning to transform raw trajectory data into actionable lane recommendations. The improvements in cluster quality, combined with meaningful labeling, demonstrate success.</p>
 
 <hr/>
 
 <p><em>Final Project Changes:</em><br>
-- Adopted K-means++ initialization and refined <code>n_clusters=3</code> for balanced clustering.<br>
-- Added density and flow features for richer traffic context.<br>
-- Achieved an improved silhouette score (~0.52), indicating more meaningful cluster groupings.<br>
-- Introduced a makefile, GitHub workflow, and tests to ensure reproducibility and maintain code quality over time.</p>
-
-</body>
-</html>
+- I adopted K-means++ initialization and refined <code>n_clusters=3</code> for balanced clustering.<br>
+- I added density and flow features for richer traffic context.<br>
+- I achieved an improved silhouette score (~0.52), indicating more meaningful cluster groupings.<br>
+- I introduced a makefile, GitHub workflow, and tests to ensure reproducibility and maintain code quality over time.</p>

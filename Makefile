@@ -3,8 +3,6 @@
 # Directories
 SERVER_DIR=server
 CLIENT_DIR=client
-
-# Virtual environment directory
 VENV_DIR=venv
 
 # Commands
@@ -13,8 +11,15 @@ PIP=$(VENV_DIR)/Scripts/pip.exe
 NODE=node
 NPM=npm
 
+# Create required directories
+create_dirs:
+	@echo "Creating required directories..."
+	@mkdir -p $(SERVER_DIR)/models
+	@mkdir -p $(SERVER_DIR)/photos
+	@mkdir -p $(SERVER_DIR)/data
+
 # Default target: Install dependencies
-install:
+install: create_dirs
 	@echo "Creating virtual environment..."
 	@python -m venv $(VENV_DIR)
 
@@ -25,15 +30,15 @@ install:
 	@$(PIP) install -r $(SERVER_DIR)/requirements.txt
 
 	@echo "Installing frontend dependencies..."
-	@cd $(CLIENT_DIR) && $(NPM) install
+	@cd $(CLIENT_DIR) && $(NPM) clean-install
 
 # Run both backend and frontend servers
-run:
+run: create_dirs
 	@echo "Starting backend server..."
 	@$(PYTHON) -m uvicorn server.api:app --host 0.0.0.0 --port 8000 &
 
 	@echo "Starting frontend server..."
-	@cd $(CLIENT_DIR) && $(NPM) start
+	@cd $(CLIENT_DIR) && NODE_OPTIONS=--openssl-legacy-provider $(NPM) start
 
 # Clean build artifacts and generated files
 clean:
