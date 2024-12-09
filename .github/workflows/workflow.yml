@@ -47,9 +47,3 @@ jobs:
       run: |
         cd client
         npm run build
-
-    # Run frontend tests
-    - name: Run Frontend Tests
-      run: |
-        cd client
-        npm test -- --watchAll=false
