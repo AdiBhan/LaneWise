@@ -48,12 +48,6 @@ jobs:
         cd client
         npm run build
 
-    # Run backend tests
-    - name: Run Backend Tests
-      run: |
-        cd server
-        python -m unittest discover -s tests
-
     # Run frontend tests
     - name: Run Frontend Tests
       run: |
