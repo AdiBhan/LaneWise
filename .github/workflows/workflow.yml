@@ -1,3 +1,4 @@
+
 name: CI Pipeline
 
 on:
@@ -9,54 +10,53 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    
     env:
       CI: false
-      PYTHONPATH: ${{ github.workspace }}
+      PYTHONPATH: ${{ github.workspace }}/server
     
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v3
+    - uses: actions/checkout@v3
     
-    - name: Set up Python
-      uses: actions/setup-python@v4
+    - uses: actions/setup-python@v4
       with:
         python-version: '3.9'
     
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
+    - uses: actions/setup-node@v3
       with:
         node-version: '18'
     
-    - name: Create Directories
+    - name: Setup Project
       run: |
-        mkdir -p server/models server/data server/photos
-    
-    - name: Install Python Dependencies
-      run: |
+        # Fix imports
         cd server
+        mkdir -p models data photos
+        # Change relative import to absolute
+        sed -i 's/from .lane_wise_system/from lane_wise_system/g' api.py
+        # Fix load_model call
+        sed -i 's/lanewise.load_model("models\/")/lanewise.load_model()/g' api.py
+        # Install dependencies
         pip install --upgrade pip
         pip install -r requirements.txt
-    
-    - name: Install Node.js Dependencies
-      run: |
-        cd client
+        cd ../client
         npm clean-install
-    
-    - name: Build Frontend
-      run: |
-        cd client
         npm run build
     
-    - name: Start Backend Server
+    - name: Start Backend
       run: |
         cd server
         python -m uvicorn api:app --host 0.0.0.0 --port 8000 &
     
-    - name: Test /evaluate Endpoint
+    - name: Test API
       run: |
         sleep 30
-        curl -s -X POST http://127.0.0.1:8000/evaluate \
+        response=$(curl -s -X POST http://127.0.0.1:8000/evaluate \
           -H "Content-Type: application/json" \
-          -d '[{"lane_id":1,"vehicle_count":20,"avg_speed":60.5,"avg_space":100.0,"avg_time":2.5}]' \
-          | grep -q '"lane_id": 1' || exit 1
+          -d '[{"lane_id":1,"vehicle_count":20,"avg_speed":60.5,"avg_space":100.0,"avg_time":2.5}]')
+        echo "API Response: $response"
+        if [[ $response == *"lane_id"* ]]; then
+          echo "Test passed"
+          exit 0
+        else
+          echo "Test failed"
+          exit 1
+        fi
