@@ -1,32 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>LaneWise - Final Report</title>
-<style>
-body {
-  font-family: Arial, sans-serif;
-  line-height: 1.6;
-  margin: 20px;
-}
-h1, h2, h3 {
-  margin-top: 1em;
-}
-img {
-  max-width: 100%;
-  height: auto;
-}
-.code-block {
-  background: #f5f5f5;
-  border: 1px solid #ddd;
-  padding: 0.5em;
-  font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
-}
-</style>
-</head>
-<body>
-
 <h1>LaneWise - A Smart Traffic Lane Decision Tool</h1>
 
 <p><img src="profile.png" alt="LaneWise Interface" /></p>
@@ -54,10 +25,10 @@ img {
 
 <h3>Makefile and Automated Setup</h3>
 <p>A <code>Makefile</code> is provided for streamlined installation and execution:</p>
-<div class="code-block">
+<div class="code-block">`
 - make install     # Installs Python and Node.js dependencies  
 - make build       # Builds the frontend and backend artifacts  
-- make run         # Starts the backend server and frontend development server  
+- make run         # Starts the backend server and frontend development server  `
 
 </div>
 
