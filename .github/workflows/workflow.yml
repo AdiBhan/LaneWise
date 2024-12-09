@@ -1,5 +1,3 @@
-# .github/workflows/ci.yml
-
 name: CI Pipeline
 
 on:
@@ -11,6 +9,9 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+
+    env:
+      CI: false
 
     steps:
     - name: Checkout Code
