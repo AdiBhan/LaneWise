@@ -1,4 +1,4 @@
-name: WorkFlow 
+name: CI Pipeline
 
 on:
   push:
@@ -10,6 +10,7 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
+    # Override CI environment variable for the entire job
     env:
       CI: false
 
@@ -48,11 +49,17 @@ jobs:
         cd client
         npm run build
 
+    # Start the FastAPI server
+    - name: Start Backend 
+      run: |
+        cd server
+        nohup uvicorn app:app --host 0.0.0.0 --port 8000 &
+
     # Test the /evaluate endpoint using curl
     - name: Test /evaluate Endpoint
       run: |
-        sleep 5  # Give the server some time to start
-        curl -s -o response.json -w "%{http_code}" -X POST http://127.0.0.1:8000/evaluate \
+        sleep 10  # Wait for the server to start
+        curl -s -X POST http://127.0.0.1:8000/evaluate \
           -H "Content-Type: application/json" \
           -d '[
                 {
@@ -62,11 +69,4 @@ jobs:
                   "avg_space": 100.0,
                   "avg_time": 2.5
                 }
-              ]' > status_code.txt
-
-        if [ "$(cat status_code.txt)" -ne 200 ]; then
-          echo "API test failed: Expected HTTP 200, got $(cat status_code.txt)"
-          exit 1
-        fi
-
-        echo "API test passed!"
+              ]' | grep -q '"lane_id": 1' || exit 1
