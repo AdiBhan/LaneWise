@@ -55,10 +55,10 @@ img {
 <h3>Makefile and Automated Setup</h3>
 <p>A <code>Makefile</code> is provided for streamlined installation and execution:</p>
 <div class="code-block">
-make install     # Installs Python and Node.js dependencies  
-make build       # Builds the frontend and backend artifacts  
-make run         # Starts the backend server and frontend development server  
-make test        # Runs the test suite  
+- make install     # Installs Python and Node.js dependencies  
+- make build       # Builds the frontend and backend artifacts  
+- make run         # Starts the backend server and frontend development server  
+
 </div>
 
 <h3>Manual Steps (If Needed)</h3>

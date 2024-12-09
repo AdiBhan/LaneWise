@@ -35,14 +35,6 @@ run:
 	@echo "Starting frontend server..."
 	@cd $(CLIENT_DIR) && $(NPM) start
 
-# Run tests for backend and frontend
-test:
-	@echo "Running backend tests..."
-	@$(PYTHON) -m unittest discover -s $(SERVER_DIR)/tests
-
-	@echo "Running frontend tests..."
-	@cd $(CLIENT_DIR) && $(NPM) test -- --watchAll=false
-
 # Clean build artifacts and generated files
 clean:
 	@echo "Cleaning frontend build..."
