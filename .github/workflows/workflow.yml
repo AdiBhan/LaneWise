@@ -1,0 +1,60 @@
+# .github/workflows/ci.yml
+
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # Set up Python
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    # Set up Node.js
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+
+    # Install backend dependencies
+    - name: Install Python Dependencies
+      run: |
+        cd server
+        pip install --upgrade pip
+        pip install -r requirements.txt
+
+    # Install frontend dependencies
+    - name: Install Node.js Dependencies
+      run: |
+        cd client
+        npm install
+
+    # Build Frontend
+    - name: Build Frontend
+      run: |
+        cd client
+        npm run build
+
+    # Run backend tests
+    - name: Run Backend Tests
+      run: |
+        cd server
+        python -m unittest discover -s tests
+
+    # Run frontend tests
+    - name: Run Frontend Tests
+      run: |
+        cd client
+        npm test -- --watchAll=false

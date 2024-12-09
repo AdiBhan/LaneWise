@@ -3,7 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import pandas as pd
 import uvicorn
-from lane_wise_system import LaneWiseSystem
+from .lane_wise_system import LaneWiseSystem
+
 from pathlib import Path
 import traceback
 from typing import List
