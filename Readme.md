@@ -105,7 +105,6 @@ npm start   # Launches React frontend on localhost:3000
 <p>The model naturally groups lanes based on how these metrics co-vary. After fitting the model and scaling data, I assign congestion levels based on cluster center speeds. The cluster with the highest average speed becomes <strong>low congestion</strong>, the lowest speed cluster is <strong>high congestion</strong>, and the remaining cluster is <strong>medium congestion</strong>.</p>
 
 <h2>Visualizations of Data</h2>
-<p>I provide several static plots for insight. In the future, I plan to incorporate interactive dashboards using libraries like Plotly or Bokeh, enabling users to hover and filter data interactively.</p>
 
 <h3>Speed Distribution by Congestion Level</h3>
 <p><img src="server/photos/average_speed_boxplot.png" alt="Average Speed Box Plot" /></p>
