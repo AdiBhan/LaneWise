@@ -10,7 +10,7 @@ import traceback
 from typing import List
 from fastapi import HTTPException
 import logging
-
+import os
 # Setting up basic logging for debugging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("LaneWiseAPI")
@@ -43,16 +43,23 @@ def initialize_model():
     initialize_model() attempts to load a pre-trained model. 
     If no model is found, it trains a new one using sample data.
     """
-    model_path = Path("models/clustering_model.joblib")
-    if model_path.exists():
-        try:
-            lanewise.load_model("models/")
-            logger.info(f"Loaded model from {model_path}.")
-        except Exception as e:
-            logger.error(f"Failed to load model from {model_path}: {e}. Training new model.")
+    try:
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        model_path = os.path.join(current_dir, "models", "clustering_model.joblib")
+        if os.path.exists(model_path):
+            success = lanewise.load_model()
+            if success:
+                logger.info(f"Loaded model from {model_path}")
+            else:
+                logger.warning("Failed to load model, training new one")
+                train_new_model()
+        else:
+            logger.info(f"Model not found at {model_path}. Training new model.")
             train_new_model()
-    else:
-        logger.info(f"Model not found at {model_path}. Training new model.")
+    except Exception as e:
+        logger.error(f"Error in initialize_model: {str(e)}")
+        logger.error(traceback.format_exc())
+
         train_new_model()
 
 def train_new_model():

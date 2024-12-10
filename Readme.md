@@ -30,6 +30,8 @@
 </ul>
 
 <h3>Automated Setup (Make)</h3>
+    <p>To start the application, use the following command. It will take 1-2 minutes to setup:</p>
+    <pre><code>make run</code></pre>
 <div class="code-block">
 <pre>
 make install     # Installs Python and Node.js dependencies
@@ -61,7 +63,7 @@ npm start   # Launches React frontend on localhost:3000
 <h2>Data Processing and Modeling</h2>
 
 <h3>Dataset</h3>
-<p>I utilize the NGSIM Vehicle Trajectories dataset from I-80. This dataset includes millions of time-stamped records at 0.1-second intervals, capturing a wide range of traffic conditions. Key features:</p>
+<p>I utilize the NGSIM Vehicle Trajectories dataset from I-80. This dataset includes 400,000 of time-stamped records at 1-second intervals, capturing a wide range of traffic conditions. Key features:</p>
 <ul>
   <li>Vehicle speeds (v_Vel)</li>
   <li>Positions and spacing (Space_Headway)</li>

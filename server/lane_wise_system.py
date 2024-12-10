@@ -231,23 +231,36 @@ class LaneWiseSystem:
         return output
 
     def save_model(self):
-        """save_model() saves our trained model so we don't need to retrain in models/ folder"""
+        """save_model() saves our trained model and scaler so we don't need to retrain"""
         current_dir = os.path.dirname(os.path.abspath(__file__))
         models_dir = os.path.join(current_dir, "models")
         os.makedirs(models_dir, exist_ok=True)
+        
+        # Save clustering model
         model_path = os.path.join(models_dir, "clustering_model.joblib")
         joblib.dump(self.clustering_model, model_path)
+        
+        # Save scaler
+        scaler_path = os.path.join(models_dir, "scaler.joblib")
+        joblib.dump(self.scaler, scaler_path)
+        
+        self.logger.info(f"Saved model and scaler to {models_dir}")
 
     def load_model(self):
-        """load_model() loads a previously trained model from models/ folder"""
+        """load_model() loads a previously trained model and scaler from models/ folder"""
         current_dir = os.path.dirname(os.path.abspath(__file__))
         models_dir = os.path.join(current_dir, "models")
         model_path = os.path.join(models_dir, "clustering_model.joblib")
+        scaler_path = os.path.join(models_dir, "scaler.joblib")
 
-        if os.path.exists(model_path):
+        if os.path.exists(model_path) and os.path.exists(scaler_path):
             self.clustering_model = joblib.load(model_path)
+            self.scaler = joblib.load(scaler_path)
+            self.logger.info("Successfully loaded model and scaler")
+            return True
         else:
-            self.clustering_model = None
+            self.logger.warning("Could not find model or scaler files")
+            return False
 
     def evaluate_clustering(self, data):
         """
