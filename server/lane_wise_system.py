@@ -121,7 +121,7 @@ class LaneWiseSystem:
         self.clustering_model.fit(X_scaled)
         lane_metrics['congestion_cluster'] = self.clustering_model.labels_
 
-        # Convert cluster centers back to original scale for interpretability
+        # Convert cluster centers back to original scale
         cluster_centers_scaled = self.clustering_model.cluster_centers_
         cluster_centers = self.scaler.inverse_transform(cluster_centers_scaled)
         cluster_centers_df = pd.DataFrame(cluster_centers, columns=features)

@@ -1,4 +1,4 @@
-# Makefile for LaneWise Project (Windows-Compatible)
+# Makefile for LaneWise Project
 
 # Directories
 SERVER_DIR=server

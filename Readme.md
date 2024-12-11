@@ -17,9 +17,8 @@
 
 <h3>Dataset Setup (Required)</h3>
 <ol>
-  <li>Download the NGSIM Vehicle Trajectories dataset from <a href="https://data.transportation.gov/Automobiles/Next-Generation-Simulation-NGSIM-Vehicle-Trajector/8ect-6jqj/data_preview">data.transportation.gov</a></li>
-  <li>Save the downloaded CSV file as <code>Next_Generation_Simulation__NGSIM__Vehicle_Trajectories_and_Supporting_Data.csv</code> in the <code>server/data/</code> directory</li>
-</ol>
+ <li>Download the official NGSIM Vehicle Trajectories dataset from <a href="https://data.transportation.gov/Automobiles/Next-Generation-Simulation-NGSIM-Vehicle-Trajector/8ect-6jqj/data_preview">Transportation.gov</a> OR  <a href="https://drive.google.com/file/d/1oK1IBgEBzNC_iyyyLALht49KFe709P1a/view?usp=sharing"><b>My Google Drive</b></a></li>
+<li>Save the downloaded CSV file in the <code>server/data/</code> directory (create the <code>/data</code> folder inside the server directory). Name the file <code>Next_Generation_Simulation__NGSIM__Vehicle_Trajectories_and_Supporting_Data.csv</code></li>
 
 <h3>Dependencies & Setup</h3>
 <p>Before running LaneWise, ensure you have:</p>
@@ -30,7 +29,7 @@
 </ul>
 
 <h3>Automated Setup (Make)</h3>
-    <p>To start the application, use the following command. It will take 1-2 minutes to setup:</p>
+    <p>To start the application, use the following command. It will take 1-2 minutes to run:</p>
     <pre><code>make run</code></pre>
 <div class="code-block">
 <pre>

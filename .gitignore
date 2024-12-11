@@ -190,14 +190,6 @@ server/.env
 .cache/
 public/
 
-# ============================
-# GitHub Actions and CI/CD
-# ============================
-
-# Ignore GitHub Actions workflow files if they contain sensitive information
-# However, typically, workflow files like .github/workflows/ci.yml should be tracked
-# Uncomment the following line only if your workflow files contain secrets or sensitive data
-# .github/workflows/ci.yml
 
 # ============================
 # Other Ignored Files
